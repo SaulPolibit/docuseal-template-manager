@@ -150,7 +150,7 @@ export interface CreateTemplatePayload {
 
 export interface CreateSubmissionPayload {
   template_id: number;
-  send_email?: boolean; // Default: true
+  send_email?: boolean; // Default: true (set to false for embedded signing)
   send_sms?: boolean; // Default: false
   order?: 'preserved' | 'random';
   submitters: Submitter[];
@@ -158,6 +158,7 @@ export interface CreateSubmissionPayload {
     subject?: string;
     body?: string;
   };
+  embed_enabled?: boolean; // Enable embedded signing (returns embed_src URLs)
 }
 
 // API Error
