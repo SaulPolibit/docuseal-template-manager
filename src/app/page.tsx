@@ -1,65 +1,152 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { FileText, Send, Plus, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function Home() {
+export default function Dashboard() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Manage your DocuSeal templates and submissions
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        <Button asChild>
+          <Link href="/templates/new">
+            <Plus className="mr-2 h-4 w-4" />
+            New Template
+          </Link>
+        </Button>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-primary" />
+              Templates
+            </CardTitle>
+            <CardDescription>
+              Create and manage document templates with field placeholders
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Upload PDF files with <code className="rounded bg-muted px-1 py-0.5">
+                {`{{tag_name}}`}
+              </code>{' '}
+              placeholders to create reusable templates.
+            </p>
+            <div className="flex gap-2">
+              <Button asChild variant="outline" className="flex-1">
+                <Link href="/templates">
+                  View All
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild className="flex-1">
+                <Link href="/templates/new">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create New
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Send className="h-5 w-5 text-primary" />
+              Submissions
+            </CardTitle>
+            <CardDescription>
+              Send templates to recipients for signing
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Create submissions from your templates and send them to recipients via email.
+            </p>
+            <div className="flex gap-2">
+              <Button asChild variant="outline" className="flex-1">
+                <Link href="/submissions">
+                  View All
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild className="flex-1">
+                <Link href="/submissions/new">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create New
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Getting Started</CardTitle>
+          <CardDescription>Follow these steps to create your first template</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ol className="space-y-4">
+            <li className="flex gap-4">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
+                1
+              </div>
+              <div>
+                <h3 className="font-semibold">Prepare your PDF template</h3>
+                <p className="text-sm text-muted-foreground">
+                  Add placeholders like <code className="rounded bg-muted px-1 py-0.5">
+                    {`{{client_name}}`}
+                  </code>, <code className="rounded bg-muted px-1 py-0.5">
+                    {`{{client_signature}}`}
+                  </code>, etc. to your PDF document.
+                </p>
+              </div>
+            </li>
+            <li className="flex gap-4">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
+                2
+              </div>
+              <div>
+                <h3 className="font-semibold">Upload and configure</h3>
+                <p className="text-sm text-muted-foreground">
+                  Upload your PDF file, and the app will automatically extract tags and detect
+                  field types and roles.
+                </p>
+              </div>
+            </li>
+            <li className="flex gap-4">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
+                3
+              </div>
+              <div>
+                <h3 className="font-semibold">Adjust field positions</h3>
+                <p className="text-sm text-muted-foreground">
+                  Use the visual editor to fine-tune field positions, sizes, and properties.
+                </p>
+              </div>
+            </li>
+            <li className="flex gap-4">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
+                4
+              </div>
+              <div>
+                <h3 className="font-semibold">Create and send</h3>
+                <p className="text-sm text-muted-foreground">
+                  Save your template to DocuSeal and create submissions to send for signing.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </CardContent>
+      </Card>
     </div>
   );
 }
