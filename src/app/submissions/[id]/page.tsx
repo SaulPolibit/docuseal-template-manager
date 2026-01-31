@@ -275,7 +275,7 @@ export default function SubmissionDetailPage() {
                 {submitter.submission_url && submitter.status !== 'completed' && (
                   <Button variant="outline" size="sm" asChild>
                     <a
-                      href={`/sign?url=${encodeURIComponent(submitter.submission_url)}`}
+                      href={submitter.submission_url}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

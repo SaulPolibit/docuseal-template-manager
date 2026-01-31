@@ -54,20 +54,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate that all fields have coordinates
-    const fieldsWithoutCoordinates = fields.filter(
-      (field: ExtractedField) => !field.areas || field.areas.length === 0
-    );
-
-    if (fieldsWithoutCoordinates.length > 0) {
-      return NextResponse.json(
-        {
-          error: 'All fields must have at least one coordinate area',
-          fieldsWithoutCoordinates: fieldsWithoutCoordinates.map((f: ExtractedField) => f.name),
-        },
-        { status: 400 }
-      );
-    }
+    // Note: Coordinate validation removed
+    // For tag-based templates ({{field_name}}), coordinates are NOT required
+    // DocuSeal uses tags in the document for positioning and fields array for metadata only
 
     // Create DocuSeal client and create template
     // Hybrid approach: Tags in document for positioning + fields for roles/types

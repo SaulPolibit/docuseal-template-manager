@@ -70,6 +70,11 @@ class DocuSealClient {
     }
   ) {
     try {
+      // Strategy: Let DocuSeal auto-detect tags and create fields
+      // Don't send fields array - DocuSeal will parse {{tag_name}} automatically
+      // For metadata (role, type), we'll need tags like {{name;role=Client;type=text}}
+      // But first, let's try with just the document and see if DocuSeal creates fields
+
       const payload: CreateTemplatePayload = {
         name,
         external_id: options?.externalId,
@@ -78,12 +83,8 @@ class DocuSealClient {
           {
             name: documentName,
             file: documentBase64,
-            // Send fields array with inferred roles and types (NO coordinates)
-            // DocuSeal will use {{tags}} in document for positioning
-            // and fields array for role/type metadata
-            fields: fields.map((field) => this.convertToDocuSealField(field, false)),
-            // Remove tags from the final document
-            remove_tags: true,
+            // Don't send fields - let DocuSeal auto-detect tags
+            // This should automatically find {{tags}} and create fields
           },
         ],
       };
@@ -91,6 +92,8 @@ class DocuSealClient {
       // Use the appropriate endpoint based on file type
       const fileType = options?.fileType || 'pdf';
       const endpoint = `/templates/${fileType}`;
+
+      console.log('Creating template with payload:', JSON.stringify(payload, null, 2));
 
       const response = await this.client.post(endpoint, payload);
       return response.data;

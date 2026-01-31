@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, FileCheck, Loader2 } from 'lucide-react';
+import { ArrowLeft, FileCheck, Loader2, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { FileUpload } from '@/components/FileUpload';
 import { Button } from '@/components/ui/button';
@@ -200,6 +200,15 @@ export default function NewTemplatePage() {
                     <p><code>{`{{provider_signature}}`}</code> → Signature field, Service Provider role</p>
                     <p><code>{`{{contract_date}}`}</code> → Date field</p>
                     <p className="mt-2"><strong>Manual override:</strong> <code>{`{{name;type=text;role=Manager}}`}</code></p>
+                    <a
+                      href="https://www.docuseal.com/examples/fieldtags.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 mt-3 font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                    >
+                      View Complete Field Tags Reference
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
                   </div>
                 </div>
               </div>

@@ -221,17 +221,15 @@ function ShareLinksContent({ templateIdParam }: { templateIdParam: string | null
       setSubmissionId(responseSubmissionId);
 
       const links: GeneratedLink[] = responseSubmitters.map((submitter: any) => {
-        // Get the embed URL from DocuSeal
-        const embedUrl = submitter.embed_src || submitter.submission_url || submitter.embed_url || '';
-
-        // Wrap it with our local /sign page so it uses our domain
-        const localUrl = embedUrl ? `${window.location.origin}/sign?url=${encodeURIComponent(embedUrl)}` : '';
+        // Get the submission URL from DocuSeal
+        // Use embed_src if available (for embedded signing), otherwise use submission_url
+        const url = submitter.embed_src || submitter.submission_url || submitter.embed_url || '';
 
         return {
           role: submitter.role,
           email: submitter.email,
           name: submitter.name,
-          url: localUrl,
+          url: url,
           copied: false,
         };
       });
