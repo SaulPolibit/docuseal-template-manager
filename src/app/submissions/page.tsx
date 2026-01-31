@@ -32,6 +32,7 @@ interface Submission {
     role: string;
     status: string;
     embed_src?: string;
+    submission_url?: string;
     sent_at?: string;
     opened_at?: string;
     completed_at?: string;
@@ -250,17 +251,17 @@ export default function SubmissionsPage() {
                               </div>
                             </div>
 
-                            {submitter.embed_src && (
+                            {(submitter.embed_src || submitter.submission_url) && submitter.status !== 'completed' && (
                               <div className="flex gap-2">
                                 <Input
-                                  value={submitter.embed_src}
+                                  value={submitter.embed_src || submitter.submission_url || ''}
                                   readOnly
                                   className="font-mono text-xs h-9"
                                 />
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  onClick={() => copyToClipboard(submitter.embed_src!, copyKey)}
+                                  onClick={() => copyToClipboard(submitter.embed_src || submitter.submission_url || '', copyKey)}
                                 >
                                   {copiedStates[copyKey] ? (
                                     <>
@@ -280,7 +281,7 @@ export default function SubmissionsPage() {
                                   asChild
                                 >
                                   <a
-                                    href={submitter.embed_src}
+                                    href={submitter.embed_src || submitter.submission_url || ''}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
