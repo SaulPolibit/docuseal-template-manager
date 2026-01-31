@@ -227,6 +227,11 @@ export default function SubmissionsPage() {
                     <div className="space-y-3">
                       {(submission.submitters || []).map((submitter, index) => {
                         const copyKey = `${submission.id}-${submitter.id}`;
+                        // Construct signing URL from slug if embed_src not available
+                        const signingUrl = submitter.embed_src ||
+                                          submitter.submission_url ||
+                                          (submitter.slug ? `https://docuseal.com/s/${submitter.slug}` : null);
+
                         return (
                           <div
                             key={submitter.id || index}
@@ -251,17 +256,17 @@ export default function SubmissionsPage() {
                               </div>
                             </div>
 
-                            {(submitter.embed_src || submitter.submission_url) && submitter.status !== 'completed' && (
+                            {signingUrl && submitter.status !== 'completed' && (
                               <div className="flex gap-2">
                                 <Input
-                                  value={submitter.embed_src || submitter.submission_url || ''}
+                                  value={signingUrl}
                                   readOnly
                                   className="font-mono text-xs h-9"
                                 />
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  onClick={() => copyToClipboard(submitter.embed_src || submitter.submission_url || '', copyKey)}
+                                  onClick={() => copyToClipboard(signingUrl, copyKey)}
                                 >
                                   {copiedStates[copyKey] ? (
                                     <>
@@ -281,7 +286,7 @@ export default function SubmissionsPage() {
                                   asChild
                                 >
                                   <a
-                                    href={submitter.embed_src || submitter.submission_url || ''}
+                                    href={signingUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
