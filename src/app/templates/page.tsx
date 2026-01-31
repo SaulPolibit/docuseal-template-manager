@@ -1,12 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Plus, FileText, Loader2, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { createClient } from '@/lib/supabase/client';
 
 interface Template {
   id: number;
@@ -20,12 +22,33 @@ interface Template {
 }
 
 export default function TemplatesPage() {
+  const router = useRouter();
   const [templates, setTemplates] = useState<Template[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   useEffect(() => {
-    fetchTemplates();
+    checkAuth();
   }, []);
+
+  const checkAuth = async () => {
+    try {
+      const supabase = createClient();
+      const { data: { user }, error } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        toast.error('Please login to access templates');
+        router.push('/login');
+        return;
+      }
+
+      setIsCheckingAuth(false);
+      fetchTemplates();
+    } catch (error) {
+      console.error('Auth check error:', error);
+      router.push('/login');
+    }
+  };
 
   const fetchTemplates = async () => {
     setIsLoading(true);
@@ -49,7 +72,7 @@ export default function TemplatesPage() {
     }
   };
 
-  if (isLoading) {
+  if (isCheckingAuth || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex items-center gap-3 text-muted-foreground">

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Plus, Send, Loader2, Calendar, User, Copy, Check, ExternalLink, Link2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
+import { createClient } from '@/lib/supabase/client';
 
 interface Submission {
   id: number;
@@ -41,13 +43,34 @@ interface Submission {
 }
 
 export default function SubmissionsPage() {
+  const router = useRouter();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    fetchSubmissions();
+    checkAuth();
   }, []);
+
+  const checkAuth = async () => {
+    try {
+      const supabase = createClient();
+      const { data: { user }, error } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        toast.error('Please login to access submissions');
+        router.push('/login');
+        return;
+      }
+
+      setIsCheckingAuth(false);
+      fetchSubmissions();
+    } catch (error) {
+      console.error('Auth check error:', error);
+      router.push('/login');
+    }
+  };
 
   const fetchSubmissions = async () => {
     setIsLoading(true);
@@ -129,7 +152,7 @@ export default function SubmissionsPage() {
     }
   };
 
-  if (isLoading) {
+  if (isCheckingAuth || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex items-center gap-3 text-muted-foreground">
